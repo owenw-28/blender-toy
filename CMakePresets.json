@@ -1,0 +1,34 @@
+{
+    "version": 10,
+    "cmakeMinimumRequired": {
+        "major": 4,
+        "minor": 2,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "vs2026",
+            "displayName": "Visual Studio 2026 (x64)",
+            "generator": "Visual Studio 18 2026",
+            "architecture": {
+                "value": "x64",
+                "strategy": "set"
+            },
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "configurePreset": "vs2026",
+            "configuration": "Debug"
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "configurePreset": "vs2026",
+            "configuration": "Release"
+        }
+    ]
+}
