@@ -1,6 +1,7 @@
 #include "glfw_system.hpp"
 #include "window.hpp"
 
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 #include <cstdio>
@@ -26,6 +27,9 @@ int main() {
     try {
         GlfwSystem system;
         Window window(system, 1200, 720, "blender-toy");
+
+        std::printf("OpenGL %s\n", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+        std::printf("GPU %s\n", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
 
         while (!window.should_close()) {
             process_events(system, window);

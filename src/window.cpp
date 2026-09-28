@@ -1,5 +1,6 @@
 #include "window.hpp"
 
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 #include <stdexcept>
@@ -16,6 +17,11 @@ Window::Window(const GlfwSystem& /*system*/, int width, int height, const std::s
     }
 
     glfwMakeContextCurrent(handle_.get());
+    
+    if (gladLoadGL(glfwGetProcAddress) == 0) {
+        throw std::runtime_error("Failed to load OpenGL functions");
+    }
+
     glfwSwapInterval(1); // Enable vsync
 }
 
