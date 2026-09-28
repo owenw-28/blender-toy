@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.2)
-project(blender-toy LANGUAGES CXX)
+project(blender-toy LANGUAGES C CXX)
 
 include(FetchContent)
 
@@ -16,6 +16,9 @@ FetchContent_Declare(
     SYSTEM
 )
 FetchContent_MakeAvailable(glfw)
+
+add_library(glad STATIC third_party/glad/src/gl.c)
+target_include_directories(glad SYSTEM PUBLIC third_party/glad/include)
 
 add_executable(blender-toy
     src/main.cpp
@@ -34,7 +37,7 @@ target_compile_options(blender-toy PRIVATE
     $<$<CONFIG:Debug>:/fsanitize=address>
 )
 
-target_link_libraries(blender-toy PRIVATE glfw)
+target_link_libraries(blender-toy PRIVATE glfw glad)
 
 target_compile_definitions(blender-toy PRIVATE GLFW_INCLUDE_NONE)
 
