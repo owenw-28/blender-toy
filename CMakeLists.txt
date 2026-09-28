@@ -26,6 +26,8 @@ add_executable(blender-toy
     src/glfw_system.hpp
     src/window.cpp
     src/window.hpp
+    src/gl_debug.cpp
+    src/gl_debug.hpp
 )
 
 target_compile_features(blender-toy PRIVATE cxx_std_20)

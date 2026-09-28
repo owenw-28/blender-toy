@@ -1,3 +1,4 @@
+#include "gl_debug.hpp"
 #include "glfw_system.hpp"
 #include "window.hpp"
 
@@ -27,6 +28,8 @@ int main() {
     try {
         GlfwSystem system;
         Window window(system, 1200, 720, "blender-toy");
+
+        install_gl_debug_callback();
 
         std::printf("OpenGL %s\n", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
         std::printf("GPU %s\n", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
