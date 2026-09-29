@@ -20,6 +20,29 @@ FetchContent_MakeAvailable(glfw)
 add_library(glad STATIC third_party/glad/src/gl.c)
 target_include_directories(glad SYSTEM PUBLIC third_party/glad/include)
 
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG        v1.92.9b
+    GIT_SHALLOW    TRUE
+)
+FetchContent_MakeAvailable(imgui)
+
+add_library(imgui STATIC
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_demo.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+target_include_directories(imgui SYSTEM PUBLIC
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
+)
+target_link_libraries(imgui PUBLIC glfw)
+
 add_executable(blender-toy
     src/main.cpp
     src/glfw_system.cpp
@@ -28,6 +51,9 @@ add_executable(blender-toy
     src/window.hpp
     src/gl_debug.cpp
     src/gl_debug.hpp
+    src/color.hpp
+    src/imgui_layer.cpp
+    src/imgui_layer.hpp
 )
 
 target_compile_features(blender-toy PRIVATE cxx_std_20)
@@ -39,7 +65,7 @@ target_compile_options(blender-toy PRIVATE
     $<$<CONFIG:Debug>:/fsanitize=address>
 )
 
-target_link_libraries(blender-toy PRIVATE glfw glad)
+target_link_libraries(blender-toy PRIVATE glfw glad imgui)
 
 target_compile_definitions(blender-toy PRIVATE GLFW_INCLUDE_NONE)
 
