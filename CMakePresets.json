@@ -30,5 +30,21 @@
             "configurePreset": "vs2026",
             "configuration": "Release"
         }
+    ],
+        "testPresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "configurePreset": "vs2026",
+            "configuration": "Debug",
+            "output": { "outputOnFailure": true }
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "configurePreset": "vs2026",
+            "configuration": "Release",
+            "output": { "outputOnFailure": true }
+        }
     ]
 }
