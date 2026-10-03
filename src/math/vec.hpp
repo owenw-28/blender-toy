@@ -1,6 +1,10 @@
 #pragma once
 
 #include <cassert>
+#include <cmath>
+#include <concepts>
+#include <limits>
+#include <type_traits>
 
 namespace bt {
 
@@ -55,6 +59,13 @@ struct Vec : detail::VecStorage<T, N> {
     }
 
     [[nodiscard]] static constexpr int size() { return N; }
+
+    constexpr Vec& operator+=(const Vec& other) {
+        for (int i = 0; i < N; ++i) {
+            (*this)[i] += other[i];
+        }
+        return *this;
+    }
 };
 
 template <typename T, int N>
@@ -64,6 +75,66 @@ template <typename T, int N>
         result[i] = a[i] + b[i];
     }
     return result;
+}
+
+template <typename T, int N>
+[[nodiscard]] constexpr Vec<T, N> operator-(const Vec<T, N>& a, const Vec<T, N>& b) {
+    Vec<T, N> result;
+    for (int i = 0; i < N; ++i) {
+        result[i] = a[i] - b[i];
+    }
+    return result;
+}
+
+template <typename T, int N>
+[[nodiscard]] constexpr Vec<T, N> operator*(const Vec<T, N>& v, std::type_identity_t<T> s) {
+    Vec<T, N> result;
+    for (int i = 0; i < N; ++i) {
+        result[i] = v[i] * s;
+    }
+    return result;
+}
+
+template <typename T, int N>
+[[nodiscard]] constexpr Vec<T, N> operator*(std::type_identity_t<T> s, const Vec<T, N>& v) {
+    return v * s;
+}
+
+template <typename T, int N>
+[[nodiscard]] constexpr T dot(const Vec<T, N>& a, const Vec<T, N>& b) {
+    T result{};
+    for (int i = 0; i < N; ++i) {
+        result += a[i] * b[i];
+    }
+    return result;
+}
+
+template <typename T>
+[[nodiscard]] constexpr Vec<T, 3> cross(const Vec<T, 3>& a, const Vec<T, 3>& b) {
+    return {
+        a.y * b.z - a.z * b.y,
+        a.z * b.x - a.x * b.z,
+        a.x * b.y - a.y * b.x,
+    };
+}
+
+template <typename T, int N>
+[[nodiscard]] constexpr T length_squared(const Vec<T, N>& v) {
+    return dot(v, v);
+}
+
+template <std::floating_point T, int N>
+[[nodiscard]] T length(const Vec<T, N>& v) {
+    return std::sqrt(length_squared(v));
+}
+
+template <std::floating_point T, int N>
+[[nodiscard]] Vec<T, N> normalize(const Vec<T, N>& v) {
+    T len = length(v);
+    if (len == 0) {
+        return Vec<T, N>{};
+    }
+    return v * (1 / len);
 }
 
 template <typename T, int N>
