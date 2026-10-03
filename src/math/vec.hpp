@@ -66,6 +66,20 @@ struct Vec : detail::VecStorage<T, N> {
         }
         return *this;
     }
+
+    constexpr Vec& operator-=(const Vec& other) {
+        for (int i = 0; i < N; ++i) {
+            (*this)[i] -= other[i];
+        }
+        return *this;
+    }
+
+    constexpr Vec& operator*=(std::type_identity_t<T> scalar) {
+        for (int i = 0; i < N; ++i) {
+            (*this)[i] *= scalar;
+        }
+        return *this;
+    }
 };
 
 template <typename T, int N>
@@ -87,6 +101,15 @@ template <typename T, int N>
 }
 
 template <typename T, int N>
+[[nodiscard]] constexpr Vec<T, N> operator-(const Vec<T, N>& v) {
+    Vec<T, N> result;
+    for (int i = 0; i < N; ++i) {
+        result[i] = -v[i];
+    }
+    return result;
+}
+
+template <typename T, int N>
 [[nodiscard]] constexpr Vec<T, N> operator*(const Vec<T, N>& v, std::type_identity_t<T> s) {
     Vec<T, N> result;
     for (int i = 0; i < N; ++i) {
@@ -98,6 +121,15 @@ template <typename T, int N>
 template <typename T, int N>
 [[nodiscard]] constexpr Vec<T, N> operator*(std::type_identity_t<T> s, const Vec<T, N>& v) {
     return v * s;
+}
+
+template <typename T, int N>
+[[nodiscard]] constexpr Vec<T, N> operator/(const Vec<T, N>& v, std::type_identity_t<T> s) {
+    Vec<T, N> result;
+    for (int i = 0; i < N; ++i) {
+        result[i] = v[i] / s;
+    }
+    return result;
 }
 
 template <typename T, int N>
@@ -130,11 +162,11 @@ template <std::floating_point T, int N>
 
 template <std::floating_point T, int N>
 [[nodiscard]] Vec<T, N> normalize(const Vec<T, N>& v) {
-    T len = length(v);
-    if (len == 0) {
+    const T len_sq = length_squared(v);
+    if (len_sq < std::numeric_limits<T>::min()) {
         return Vec<T, N>{};
     }
-    return v * (1 / len);
+    return v * (T{1} / std::sqrt(len_sq));
 }
 
 template <typename T, int N>
