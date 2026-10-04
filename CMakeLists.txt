@@ -94,6 +94,7 @@ add_executable(blender-toy
     src/imgui_layer.cpp
     src/imgui_layer.hpp
     src/math/vec.hpp
+    src/math/mat.hpp
 )
 blender_toy_apply_defaults(blender-toy)
 target_link_libraries(blender-toy PRIVATE glfw glad imgui bt_math)
@@ -103,6 +104,7 @@ enable_testing()
 
 add_executable(bt_math_tests
     tests/math/vec_test.cpp
+    tests/math/mat_test.cpp
 )
 blender_toy_apply_defaults(bt_math_tests)
 target_link_libraries(bt_math_tests PRIVATE bt_math GTest::gtest_main)
